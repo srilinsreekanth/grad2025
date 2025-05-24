@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Graduation Ticket Download</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      color: #333;
+    }
+    input {
+      font-size: 1.5rem;
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid #aaa;
+    }
+    button {
+      font-size: 1.5rem;
+      padding: 12px 30px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    img {
+      margin-top: 20px;
+      max-width: 100%;
+      border: 4px solid #007bff;
+      border-radius: 15px;
+    }
+    .download-link {
+      display: block;
+      margin-top: 15px;
+      font-size: 1.3rem;
+      color: #007bff;
+    }
+    .error {
+      color: red;
+      font-size: 1.3rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Download Your Graduation Ticket</h1>
+  <input type="text" id="phoneInput" placeholder="Enter your phone number" />
+  <br>
+  <button onclick="getTicket()">Get Ticket</button>
+  <p class="error" id="errorText"></p>
+  <div id="ticketSection" style="display:none;">
+    <img id="ticketImage" alt="Your Ticket" />
+    <a id="downloadLink" class="download-link" download>Download Ticket</a>
+  </div>
+
+  <script>
+    function getTicket() {
+      const phone = document.getElementById("phoneInput").value.trim();
+      const ticketImg = document.getElementById("ticketImage");
+      const ticketSection = document.getElementById("ticketSection");
+      const downloadLink = document.getElementById("downloadLink");
+      const errorText = document.getElementById("errorText");
+
+      if (!phone.match(/^\d{5,15}$/)) {
+        errorText.textContent = "Please enter a valid phone number.";
+        ticketSection.style.display = "none";
+        return;
+      }
+
+      const ticketURL = `tickets/${phone}.jpg`;
+
+      // Try loading the image
+      const img = new Image();
+      img.onload = () => {
+        errorText.textContent = "";
+        ticketImg.src = ticketURL;
+        downloadLink.href = ticketURL;
+        downloadLink.download = `${phone}_ticket.jpg`;
+        ticketSection.style.display = "block";
+      };
+      img.onerror = () => {
+        errorText.textContent = "Ticket not found. Please check the number.";
+        ticketSection.style.display = "none";
+      };
+      img.src = ticketURL;
+    }
+  </script>
+</body>
+</html>
